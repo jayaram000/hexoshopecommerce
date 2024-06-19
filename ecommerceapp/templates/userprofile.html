@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% block extra_css %}
+<link rel="stylesheet"  href="{% static 'css/userprofile.css' %}">
+{% endblock %}
+<section class="bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 mb-4 mb-sm-5">
+                <div class="card card-style1 border-0">
+                    <div class="card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7">
+                        <div class="row align-items-center">
+                            {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} text-dark"><b>{{ message }}</b></div>
+                            {% endfor %}
+                            {% endif %}
+                            <div class="col-lg-6 mb-4 mb-lg-0 pt-3 ps-5">
+                                {% if user_profile.profile %}
+                                    <img src="{{ user_profile.profile.url }}" alt="{{ user.username }}" class="rounded-3 " id="currentProfileImage"><br>
+                                {% else %}
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" class="rounded-3 " alt="..." id="currentProfileImage"><br>
+                                {% endif %}
+                                <a href="" data-bs-toggle="modal" data-bs-target="#bookingModal" class="btnn"><i class="fa-solid fa-pen-to-square fs-5"></i></a>
+                            </div>
+                            <div class="col-md-6 px-xl-10">
+                                <div class="bg-dark d-lg-inline-block py-1-9 px-1-9 px-sm-6 mb-1-9 rounded">
+                                    <h3 class="h1 text-white mb-0 text-center ps-5 pe-5">{{ user.username }}</h3>
+                                    <a href="{% url 'cart:orders' %}"><button class="btn btn-danger text-white">My orders</button></a>
+                                </div>
+                                <ul class="list-unstyled mb-1-9">
+                                    <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Full Name:</span> {{ user.first_name }} {{ user.last_name }} </li>
+                                    <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Mail address:</span> {{ user.email }}</li>
+                                    {%if address%}
+                                    <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Address:</span> {{ address.address }}<br>
+                                    {{address.city}},
+                                    {{address.country}}<br>
+                                    {{address.zip_code}}</li>
+                                    <li class="display-28"><span class="display-26 text-secondary me-2 font-weight-600">Phone:</span>{{address.phone}}</li>
+                                    {%endif%}
+                                </ul>
+                                <div class="button-container "> 
+                                    {%if address%}
+                                    
+                                    <a href="{% url 'cart:update_address' %}"class="button1 btn btn-secondary text-white">Edit Address</a>
+                                    <a href="{% url 'cart:delete_address' %}" class="button1 btn btn-secondary "><i class="fa-solid fa-trash"></i></a>
+                                    {%else%}
+                                    <a href="{% url 'cart:add_address' %}" class="button1 btn btn-secondary text-white ">Add Address</a>
+                                    {%endif%}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bookingModalLabel">Profile Update</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="bookingForm" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Custom file input with onchange event -->
+                        <div class="form-group mb-3">
+                            <label for="profile" class="form-label">Profile Image</label>
+                            <input class="form-control" type="file" name="profile" id="profile" onchange="previewImage(event)">
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" name="profile-clear" id="profile-clear">
+                                <label class="form-check-label" for="profile-clear">Clear</label>
+                            </div>
+                        </div>
+                        
+                        <!-- Image preview element -->
+                        <div class="form-group mb-3">
+                            <img id="imagePreview" src="#" alt="Selected Image" class="rounded-3" width="150" height="150" style="display: none;">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+function previewImage(event) {
+    var reader = new FileReader();
+    reader.onload = function() {
+        var output = document.getElementById('imagePreview');
+        output.src = reader.result;
+        output.style.display = 'block'; // Show the image preview
+    }
+    reader.readAsDataURL(event.target.files[0]);
+}
+
+// Handle clear checkbox
+document.getElementById('profile-clear').addEventListener('change', function() {
+    if (this.checked) {
+        var output = document.getElementById('imagePreview');
+        output.src = '';
+        output.style.display = 'none'; // Hide the image preview
+        document.getElementById('profile').value = ''; // Clear the file input
+    }
+});
+</script>
+{% endblock %}

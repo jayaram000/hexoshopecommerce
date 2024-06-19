@@ -1,0 +1,50 @@
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="navbar navbar-expand-lg main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="index.html" class="navbar-brand logo">
+                        <img src="{% static 'images/logo.png' %}">
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Toggler/Collapsible Button Start ***** -->
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"><i class="fa-solid fa-bars"></i></span>
+                    </button>
+                    <!-- ***** Toggler/Collapsible Button End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <div class="collapse navbar-collapse" id="navbarResponsive">
+                        <ul class="navbar-nav ms-auto bg-light">
+                            <li class="nav-item scroll-to-section"><a href="{% url 'ecommerce:home' %}" class="nav-link active">Home</a></li>
+                            <li class="nav-item scroll-to-section"><a href="{% url 'ecommerce:products' %}" class="nav-link">All Products</a></li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Categories</a>
+                                <div class="dropdown-menu" aria-labelledby="categoriesDropdown">
+                                    {% for i in links %}
+                                    <a class="dropdown-item" href="{% url 'ecommerce:category' i.name %}">{{ i.name }}</a>
+                                    {% endfor %}
+                                </div>
+                            </li>
+                            {% if user.is_authenticated %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'cart:cartview' %}"><sup class="text-warning">{{ count }}</sup><i class="fa fa-shopping-cart" style="font-size:25px;"></i></a></li>
+                            <li class="nav-item"><a class="nav-link ms-1" href="{% url 'ecommerce:fav_view' %}"><i class="fa-solid fa-heart" style="font-size:25px;"></i></a></li>
+                            <li class="nav-item scroll-to-section"><a class="nav-link" href="{% url 'ecommerce:logout' %}">Logout</a></li>
+                            {% else %}
+                            <li class="nav-item scroll-to-section"><a href="{% url 'ecommerce:register' %}" class="nav-link">Register</a></li>
+                            {% endif %}
+                        </ul>
+                        <form class="d-flex ms-3 " method="POST" action="">
+                            {% csrf_token %}
+                            <input class="form-control me-3 mt-3 " type="search" placeholder="Search" name="q" >
+                            <div class="">
+                            <button class="btn btn-outline-success fs-6 rounded me-3  " type="submit">Search</button>
+                        </div>
+                        </form>
+                    </div>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>

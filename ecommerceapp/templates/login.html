@@ -1,0 +1,49 @@
+{%extends 'base.html' %}
+{%load static%}
+
+{%block content%}
+
+    <!-- ***** Main Banner Area End ***** -->
+    
+    <!-- ***** Contact Area Starts ***** -->
+    <div class="contact-us">
+        <div class="container">
+          
+            <center>
+                    <div class="section-heading pt-4">
+                        <h2 class="pt-4">Login</h2>
+                        <span></span>
+                    </div>
+                    {% if failed %}
+                    <p class="alert alert-danger">{{ failed }}</p>
+                    {% endif %}
+                    <form id="contact" action="" method="post">
+                            {% csrf_token %}
+                              <input name="uname" type="text" class="m-3" id="name" placeholder="Enter Username" required="">
+                              <input name="pass" type="password" class="m-3" placeholder="Enter Password" required="">
+                              <div class="signup">
+                                <span class="signup">Don't have an account?
+                                 <a href="{%url 'ecommerce:register' %}" class="text-info">Sign in</a>
+                                </span>
+                              </div>
+                              <fieldset>
+                                <button type="submit" id="form-submit" class="main-dark-button m-3"><i class="fa fa-paper-plane"></i></button>
+                              </fieldset>
+                              
+                
+                      </form>
+                    </center>
+                    
+             
+        </div>
+    </div>
+   
+    <!-- ***** Contact Area Ends ***** -->
+
+    <!-- ***** Subscribe Area Starts ***** -->
+    
+    <!-- ***** Subscribe Area Ends ***** -->
+
+
+
+{%endblock%}

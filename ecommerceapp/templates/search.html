@@ -1,0 +1,62 @@
+
+{%extends 'base.html'%}
+{%load static%}
+{%block content%}
+
+
+    <!-- ***** Products Area Starts ***** -->
+    <section class="section" id="products">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 mt-5">
+                    <div class="section-heading ">
+                       
+                        {%if b%}
+                        <h3 class="pt-3 text-center">Search result of <span style="font-size: 30px;" class="text-warning">{{query}}</span></h3>
+                        {%else%}
+                            {%if not query%}
+                            <h3 class="pt-3 text-center">Search results appear here..</h3>
+                            {%else%}
+                            <h3 class="pt-3 text-center">Search result not found</h3>
+                            {%endif%}
+                        {%endif%}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                {%for i in b%}
+                <div class="col-lg-4">
+                    
+                    <div class="item">
+                        
+                        <div class="thumb">
+                            <div class="hover-content">
+                                <ul>
+                                    <li><a href="{%url 'ecommerce:singleprdt' i.pk%}"><i class="fa fa-eye"></i></a></li>
+                                    
+                                    <li><a href="{%url 'cart:addtocart' i.name%}"><i class="fa fa-shopping-cart"></i></a></li>
+                                </ul>
+                            </div>
+                            <img src="{{i.image.url}}" alt="">
+                        </div>
+                        <div class="down-content">
+                            <h4>{{i.name}}</h4>
+                            <span>${{i.price}}</span>
+                            <ul class="stars">
+                                <li><i class="fa fa-star"></i></li>
+                                <li><i class="fa fa-star"></i></li>
+                                <li><i class="fa fa-star"></i></li>
+                                <li><i class="fa fa-star"></i></li>
+                                <li><i class="fa fa-star"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                   
+                </div>
+                {%endfor%}
+                
+    </section>
+    <!-- ***** Products Area Ends ***** -->
+    {%endblock%}

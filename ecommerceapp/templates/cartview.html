@@ -1,0 +1,131 @@
+{%extends 'base.html'%}
+{%load static%}
+
+{%block content%}
+
+<div class="card">
+    <div class="row ">
+        <div class="col-md-8 cart">
+            <div class="title ">
+                <div class="row">
+                    <div class="col"><h4><b>Shopping Cart</b></h4></div>
+                    <div class="col align-self-center text-right text-muted">{{count}}</div>
+                </div>
+            </div>
+            {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} text-danger"><b>{{ message }}</b></div>
+    {% endfor %}
+    {% endif %}
+            {%for i in c %}    
+            <div class="row border-top border-bottom">
+                <div class="row main align-items-center">
+                    <div class="col-2"><img class="img-fluid" src="{{i.product.image.url}}"></div>
+                    <div class="col">
+                        <div class="row text-muted">{{i.product.name}}</div>
+                        <div class="row">category : {{i.product.category}}</div>
+                    </div>
+                    <div class="col">
+                        <a href="{% url 'cart:removequantity' i.product.name %}">-</a><a href="#" class="border">{{i.quantity}}</a><a href="{% url 'cart:addtocart' i.product.name %}">+</a>
+                    </div>
+                    <div class="col">{{i.product.price}} <a href="{% url 'cart:delete' i.product.name %}"><span class="close">&#10005;</span></a></div>
+                </div>
+            </div>
+            {%endfor%}
+            <div class="back-to-shop"><a href="{%url 'ecommerce:products' %}">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
+        </div>
+        <div class="col-md-4 summary pt-5">
+            <div><h5><b>Summary</b></h5></div>
+            <hr>
+            <div class="row">
+                <div class="col" style="padding-left:0;">Discount 20% for Purchase above 1000</div>
+                
+            </div>
+        
+            {%if t >= 1000 %}
+            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                <div class="col">TOTAL</div>
+                <div class="col text-right"><b>{{ t }}</b></div>
+            </div>
+            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                <div class="col"><i><span class="text-dark">Discount &nbsp;20%</i></span></div>
+                <div class="col text-right">-<i>{{ d }}</i></div>
+            </div>
+            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                <div class="col">Grand Total</div>
+                <div class="col text-right"><b>{{ dis }}/-</b></div>
+            </div>
+            {%else%}
+            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                <div class="col">TOTAL</div>
+                <div class="col text-right"><b>{{ t }}/-</b></div>
+            </div>
+            {%endif%}
+            {%if t > 1 %}
+            <a href="" data-bs-toggle="modal" data-bs-target="#bookingModal" class="btn">Checkout</a>
+            {%endif%}
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookingModalLabel">Checkout form</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+    <form id="bookingForm" method="POST" action="{% url 'cart:orderform' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+        <p><b>Total: </b>{{ t }}/-</p>
+        <p><b>Discount:</b> {{ d }}</p>
+        <p><b>Total after discount:</b> {{ dis }}</p>
+        <p><b>Address:</b> {{ address.address }}</p>
+        <p><b>City:</b> {{ address.city }}</p>
+        <p><b>Country: </b>{{ address.country }}</p>
+        <p><b>Zip Code:</b> {{ address.zip_code }}</p>
+        <p><b>Phone: </b>{{ address.phone }}</p>
+        {%if address%}
+    <a href="{% url 'cart:update_address' %}" class="text-primary text-decoration-underline">edit Address</a>
+    {%else%}
+    <a href="{% url 'cart:add_address' %}" class="text-primary text-decoration-underline">Click here to Add Address</a>
+    {%endif%}
+        </div>
+        <div id="formMessage" class="alert d-none"></div>
+        <button type="submit" class="btn btn-success">Cash on delivery</button>
+        <button type="button" class="btn btn-info paywithrazorpay">Razorpay</button>
+    </form>
+</div>
+
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('bookingForm').addEventListener('submit', function(event) {
+        // Show success message
+        var formMessage = document.getElementById('formMessage');
+        formMessage.innerHTML = 'order placed successfully!';
+        formMessage.classList.remove('alert-danger'); // Remove any error classes
+        formMessage.classList.add('alert-success'); // Add success class
+        formMessage.classList.remove('d-none'); // Show the message
+
+        // Allow the form to submit after showing the success message
+        setTimeout(function() {
+            formMessage.classList.add('d-none'); // Hide the message again
+            event.target.submit(); // Manually submit the form
+        }, 10000); // Adjust the delay (in milliseconds) as needed
+    });
+</script>
+  {%endblock%}
+
+
+  {%block scripts%}
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
+{%endblock scripts%}
+
+
+
+

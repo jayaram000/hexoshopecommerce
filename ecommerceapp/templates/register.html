@@ -1,0 +1,57 @@
+{%extends 'base.html' %}
+{%load static%}
+
+{%block content%}
+
+    <!-- ***** Main Banner Area End ***** -->
+    
+    <!-- ***** Contact Area Starts ***** -->
+    <div class="contact-us">
+        <div class="container">
+          
+            <center>
+                    <div class="section-heading pt-4">
+                        <h2 class="pt-4">Register</h2>
+                        <span></span>
+                    </div>
+                    {% if success %}
+                    <p class="alert alert-success ">{{ success }} Click here to <a href="{%url 'ecommerce:login' %}" class="alert-link">Login</a></p>
+                    {% endif %}
+                
+                    {% if failed %}
+                    <p class="alert alert-danger fs-5 ">{{ failed }}</p>
+                    {% endif %}
+                    <form id="contact" action="" method="POST">
+                        {% csrf_token %}
+                              <input name="uname" type="text" class="m-3" id="name" placeholder="Create a Username" required="">
+                              <input name="fname" type="text" class="m-3" id="name" placeholder="First name" required="">
+                              <input name="lname" type="text"  class="m-3" placeholder="Last name" required="">
+                              <input name="email" type="text" class="m-3" id="email"  placeholder="Your email" required="">
+                              <input name="pass" type="password" class="m-3" placeholder="Create a Password" required="">
+                              <input name="cpass" type="password" class="m-3" placeholder="Confirm Password" required="">
+                              <div class="signup">
+                                <span class="signup">Already have an account?
+                                 <a href="{%url 'ecommerce:login' %}" class="text-info ">Login</a>
+                                </span>
+                              </div>
+                              <fieldset>
+                                <button type="submit" id="form-submit" class="main-dark-button m-3"><i class="fa fa-paper-plane"></i></button>
+                              </fieldset>
+                              
+                
+                      </form>
+                    </center>
+                    
+             
+        </div>
+    </div>
+   
+    <!-- ***** Contact Area Ends ***** -->
+
+    <!-- ***** Subscribe Area Starts ***** -->
+    
+    <!-- ***** Subscribe Area Ends ***** -->
+
+
+
+{%endblock%}

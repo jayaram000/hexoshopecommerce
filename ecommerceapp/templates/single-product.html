@@ -1,0 +1,81 @@
+{%extends 'base.html' %}
+{%load static%}
+    <!-- ***** Main Banner Area End ***** -->
+
+{%block content%}
+    <!-- ***** Product Area Starts ***** -->
+    <section class="section" id="product">
+      
+        <div class="container pt-5">
+            {% for message in messages %}
+                    {%if f%}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ message }}
+                    {%else%}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ message }}
+                    {%endif%}
+                    <button type="button" class="btn-close ps-5" data-bs-dismiss="alert" aria-label="Close"></button>
+                         </div> 
+                        {% endfor %}
+                              
+            <div class="row ">
+                
+                <div class="col-lg-6 mt-5">
+
+                    
+                <div class="left-images">
+                    <img src="{{prdt.image.url}}" alt="">
+                    {%if prdt.image1 %}
+                    <img src="{{prdt.image1.url}}" alt="">
+                    {%else %}
+                    <img src="" alt="">
+                    {%endif%}
+                </div>
+            </div>
+
+            <div class="col-lg-4 mt-5">
+                <div class="right-content">
+                    <h4>{{prdt.name}}</h4>
+                    <span class="price">${{prdt.price}}</span>
+                    <ul class="stars">
+                        <li><i class="fa fa-star"></i></li>
+                        <li><i class="fa fa-star"></i></li>
+                        <li><i class="fa fa-star"></i></li>
+                        <li><i class="fa fa-star"></i></li>
+                        <li><i class="fa fa-star"></i></li>
+                    </ul>
+                    <span>{{prdt.desc}}</span>
+                    <div class="quote">
+                        <i class="fa fa-quote-left"></i><p>{{prdt.category.desc}}</p>
+                    </div>
+                    <br>
+                    
+                    <br>
+                    
+                    <div>
+                        
+                    {% if f %}
+                    
+                    <a href="{%url 'ecommerce:favo' prdt.pk %}" onclick="showAlert('Product removed from favorites.');"><i class="fa-solid fa-heart" style="font-size:23px;text-decoration: none;color:black"></i></a>
+                    <!-- <div class="alert alert-success">prodt added </div> -->
+                    {% else %}
+                    <a href="{%url 'ecommerce:favo' prdt.pk %}" onclick="showAlert('Product added to favorites.');"><i class="fa-regular fa-heart" style="font-size:23px;text-decoration: none;color:black"></i></a>
+                    {%endif%}
+                </div>
+                
+                
+                    <div class="total">
+                        <p>{{prdt.stock}} products in stock</p>
+                        <div class="btn btn-dark me-5"><a class="text-light" href="{%url 'cart:addtocart' prdt.name%}">Add To Cart</a></div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
+
+        
+    <!-- ***** Product Area Ends ***** -->
+    
+   {%endblock%}
